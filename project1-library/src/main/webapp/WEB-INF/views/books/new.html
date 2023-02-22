@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить книгу</title>
+</head>
+<body>
+
+<form th:method="POST" th:action="@{/books}" th:object="${book}">
+    <label for="title">Название:</label>
+    <input type="text" th:field="*{title}" id="title">
+    <div style="color:red" th:if="${#fields.hasErrors()}" th:errors="*{title}"></div>
+    <br/>
+    <label for="author">Автор:</label>
+    <input type="text" th:field="*{author}" id="author">
+    <div style="color:red" th:if="${#fields.hasErrors()}" th:errors="*{author}"></div>
+    <br/>
+    <label for="yearOfPublication">Год публикации:</label>
+    <input type="text" th:field="*{yearOfPublication}" id="yearOfPublication">
+    <div style="color:red" th:if="${#fields.hasErrors()}" th:errors="*{yearOfPublication}"></div>
+    <br/>
+    <input type="submit" value="Добавить">
+</form>
+
+</body>
+</html>
