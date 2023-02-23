@@ -11,7 +11,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/books")
@@ -27,8 +26,22 @@ public class BooksController {
     }
 
     @GetMapping()
-    public String index(Model model) {
-        model.addAttribute("books", booksService.findAll());
+    public String index(@RequestParam(value = "sort_by", required = false) String propertyName,
+                        @RequestParam(value = "page", required = false) Integer page,
+                        @RequestParam(value = "books_per_page", required = false) Integer booksPerPage,
+                        Model model) {
+        boolean sorting = (propertyName != null);
+        boolean pagination = (page != null && booksPerPage != null);
+
+        if (pagination && sorting) {
+            model.addAttribute("books", booksService.findAllPageSortBy(page, booksPerPage, propertyName));
+        } else if (sorting) {
+            model.addAttribute("books", booksService.findAllSortBy(propertyName));
+        } else if (pagination) {
+            model.addAttribute("books", booksService.findAllPage(page, booksPerPage));
+        } else {
+            model.addAttribute("books", booksService.findAll());
+        }
         return "books/index";
     }
 
@@ -66,7 +79,7 @@ public class BooksController {
     }
 
     @PatchMapping("/{id}")
-    public String update(@PathVariable("id") int id, @ModelAttribute("book")  @Valid Book book,
+    public String update(@PathVariable("id") int id, @ModelAttribute("book") @Valid Book book,
                          BindingResult bindingResult) {
         if (bindingResult.hasErrors()) return "books/edit";
         booksService.update(id, book);

@@ -4,6 +4,8 @@ import me.artyom.library.jpa.model.Book;
 import me.artyom.library.jpa.model.Person;
 import me.artyom.library.jpa.repository.BooksRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,18 @@ public class BooksService {
 
     public List<Book> findAll() {
         return booksRepository.findAll();
+    }
+
+    public List<Book> findAllSortBy(String propertyName) {
+        return booksRepository.findAll(Sort.by(propertyName));
+    }
+
+    public List<Book> findAllPage(int page, int size) {
+        return booksRepository.findAll(PageRequest.of(page, size)).getContent();
+    }
+
+    public List<Book> findAllPageSortBy(int page, int size, String propertyName) {
+        return booksRepository.findAll(PageRequest.of(page, size, Sort.by(propertyName))).getContent();
     }
 
     public Book findById(int id) {
