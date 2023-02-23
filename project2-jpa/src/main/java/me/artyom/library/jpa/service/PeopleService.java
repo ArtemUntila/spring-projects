@@ -3,6 +3,7 @@ package me.artyom.library.jpa.service;
 import me.artyom.library.jpa.model.Book;
 import me.artyom.library.jpa.model.Person;
 import me.artyom.library.jpa.repository.PeopleRepository;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,7 +49,17 @@ public class PeopleService {
     }
 
     public List<Book> getBooksById(int id) {
-        return findById(id).getBooks();
+        Optional<Person> optionalPerson = peopleRepository.findById(id);
+
+        if (optionalPerson.isPresent()) {
+            List<Book> books = optionalPerson.get().getBooks();
+            // Adding books to persistence context manually because of @OneToMany Lazy Initialization
+            Hibernate.initialize(books);
+
+            return books;
+        } else {
+            return null;
+        }
     }
 
     // Validation

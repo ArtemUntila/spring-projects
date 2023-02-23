@@ -47,9 +47,8 @@ public class BooksService {
         booksRepository.deleteById(id);
     }
 
-    public Optional<Person> getOwnerById(int id) {
-        Person owner = findById(id).getOwner();
-        return Optional.of(owner);
+    public Person getOwnerById(int id) {
+        return booksRepository.findById(id).map(Book::getOwner).orElse(null);
     }
 
     @Transactional

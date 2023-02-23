@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Человек</title>
+</head>
+<body>
+
+<p th:text="${person.toString()}"></p>
+
+<hr/>
+<div th:unless="${#lists.isEmpty(books)}">
+    <h3>Книги:</h3>
+    <div th:each="book : ${books}">
+        <p th:text="${book.toString()}"></p>
+    </div>
+</div>
+<h3 th:if="${#lists.isEmpty(books)}">Книг нет</h3>
+<hr/>
+
+<form th:method="GET" th:action="@{/people/{id}/edit(id=${person.getId()})}">
+    <input type="submit" value="Редактировать">
+</form>
+<br/>
+<form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}">
+    <input type="submit" value="Удалить">
+</form>
+
+</body>
+</html>
