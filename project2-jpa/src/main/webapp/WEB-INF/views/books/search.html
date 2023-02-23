@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Поиск книги</title>
+</head>
+<body>
+
+<form th:method="GET" th:action="@{/books/search}">
+    <label for="search_field">Введите поисковой запрос:</label>
+    <input type="search" id="search_field" th:name="q">
+    <input type="submit">
+</form>
+
+<div th:if="${result}">
+    <hr/>
+    <p th:if="${#lists.isEmpty(result)}">Поиск не дал результатов</p>
+
+    <div th:each="book : ${result}">
+        <p th:text="${book.toString()}"></p>
+
+        <p th:if="${book.getOwner() != null}" th:text="'Держатель книги: ' + ${book.getOwner().getFullName()}"></p>
+        <p th:if="${book.getOwner() == null}">Книга свободна</p>
+
+        <hr/>
+    </div>
+</div>
+
+</body>
+</html>

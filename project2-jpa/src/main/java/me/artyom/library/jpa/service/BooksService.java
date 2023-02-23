@@ -74,4 +74,9 @@ public class BooksService {
     public void assignById(int id, Person person) {
         findById(id).setOwner(person);
     }
+
+    public List<Book> findByTitleStaringWith(String startingWith) {
+        // returns an empty List if nothing was found
+        return booksRepository.findByTitleStartingWith(startingWith);
+    }
 }
