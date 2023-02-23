@@ -1,0 +1,1 @@
+alter table Book add column taken_at TIMESTAMP;
