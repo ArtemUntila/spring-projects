@@ -12,7 +12,8 @@
 <div th:unless="${#lists.isEmpty(books)}">
     <h3>Книги:</h3>
     <div th:each="book : ${books}">
-        <p th:text="${book.toString()}"></p>
+        <p th:unless="${book.isExpired()}" th:text="${book.toString()}"></p>
+        <p th:if="${book.isExpired()}" th:text="${book.toString()}" style="color:red"></p>
     </div>
 </div>
 <h3 th:if="${#lists.isEmpty(books)}">Книг нет</h3>

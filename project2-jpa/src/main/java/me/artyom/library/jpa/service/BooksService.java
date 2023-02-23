@@ -9,8 +9,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -40,9 +40,7 @@ public class BooksService {
     }
 
     public Book findById(int id) {
-        Optional<Book> optionalBook = booksRepository.findById(id);
-
-        return optionalBook.orElse(null);
+        return booksRepository.findById(id).orElse(null);
     }
 
     @Transactional
@@ -52,7 +50,13 @@ public class BooksService {
 
     @Transactional
     public void update(int id, Book updatedBook) {
+        // using getById, because we are pretty sure, that this object (row in table) exists
+        Book bookToBeUpdated = booksRepository.getById(id);
+
+        // setting all properties, that are not specified in form
         updatedBook.setId(id);
+        updatedBook.setOwner(bookToBeUpdated.getOwner());
+
         booksRepository.save(updatedBook);
     }
 
@@ -67,12 +71,18 @@ public class BooksService {
 
     @Transactional
     public void releaseById(int id) {
-        findById(id).setOwner(null);
+        booksRepository.findById(id).ifPresent(book -> {
+            book.setOwner(null);
+            book.setTakenAt(null);
+        });
     }
 
     @Transactional
     public void assignById(int id, Person person) {
-        findById(id).setOwner(person);
+        booksRepository.findById(id).ifPresent(book -> {
+            book.setOwner(person);
+            book.setTakenAt(new Date());
+        });
     }
 
     public List<Book> findByTitleStaringWith(String startingWith) {
