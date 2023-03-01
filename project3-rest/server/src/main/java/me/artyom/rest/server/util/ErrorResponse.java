@@ -1,10 +1,10 @@
-package me.artyom.rest.server.util.sensor;
+package me.artyom.rest.server.util;
 
-public class SensorErrorResponse {
+public class ErrorResponse {
 
     private String message;
 
-    public SensorErrorResponse(String message) {
+    public ErrorResponse(String message) {
         this.message = message;
     }
 

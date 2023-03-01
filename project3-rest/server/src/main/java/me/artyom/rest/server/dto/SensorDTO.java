@@ -5,8 +5,9 @@ import javax.validation.constraints.Size;
 
 public class SensorDTO {
 
+    // Messages are automatically generated (in the target language)
     @NotEmpty
-    @Size(min = 3, max = 30, message = "Sensor name must be between 3 and 30 characters")
+    @Size(min = 3, max = 30)
     private String name;
 
     public String getName() {

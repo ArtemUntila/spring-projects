@@ -14,7 +14,7 @@ public class Sensor {
     private int id;
 
     @NotEmpty
-    @Size(min = 3, max = 30, message = "Sensor name must be between 3 and 30 characters")
+    @Size(min = 3, max = 30)
     @Column(name = "name")
     private String name;
 
