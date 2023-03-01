@@ -1,11 +1,15 @@
 package me.artyom.rest.server.util;
 
+import java.util.Date;
+
 public class ErrorResponse {
 
     private String message;
+    private Date timestamp;
 
-    public ErrorResponse(String message) {
+    public ErrorResponse(String message, Date timestamp) {
         this.message = message;
+        this.timestamp = timestamp;
     }
 
     public String getMessage() {
@@ -14,5 +18,13 @@ public class ErrorResponse {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
     }
 }

@@ -3,8 +3,9 @@ package me.artyom.rest.server.controller;
 import me.artyom.rest.server.dto.SensorDTO;
 import me.artyom.rest.server.model.Sensor;
 import me.artyom.rest.server.service.SensorService;
-import me.artyom.rest.server.util.ModelNotSavedException;
 import me.artyom.rest.server.util.ErrorResponse;
+import me.artyom.rest.server.util.ErrorsUtil;
+import me.artyom.rest.server.util.ModelNotSavedException;
 import me.artyom.rest.server.util.SensorValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/sensors")
@@ -38,15 +38,8 @@ public class SensorController {
 
         sensorValidator.validate(sensor, bindingResult);
 
-        if (bindingResult.hasErrors()) {
-            List<String> errorMessages = bindingResult.getFieldErrors().stream()
-                    .map(fieldError -> fieldError.getField() + " - " + fieldError.getDefaultMessage())
-                    .collect(Collectors.toList());
-
-            String exceptionMessage = String.join("; ", errorMessages);
-
-            throw new ModelNotSavedException(exceptionMessage);
-        }
+        if (bindingResult.hasErrors())
+            throw new ModelNotSavedException(ErrorsUtil.fieldErrorsFullMessage(bindingResult));
 
         sensorService.save(sensor);
 
@@ -55,7 +48,7 @@ public class SensorController {
 
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleException(ModelNotSavedException e) {
-        ErrorResponse response = new ErrorResponse(e.getMessage());
+        ErrorResponse response = new ErrorResponse(e.getMessage(), new Date());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
