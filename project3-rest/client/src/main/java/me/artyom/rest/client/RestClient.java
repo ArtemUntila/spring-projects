@@ -15,7 +15,7 @@ public class RestClient {
     private static final String SENSORS_REGISTRATION = "http://localhost:8080/sensors/registration";
     private static final String MEASUREMENTS_ADD = "http://localhost:8080/measurements/add";
 
-    static final String SENSOR = "sensor";
+    private static final String SENSOR = "sensor";
 
     private static final RestTemplate restTemplate = new RestTemplate();
 
